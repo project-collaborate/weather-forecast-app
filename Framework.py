@@ -4,11 +4,14 @@ import requests
 class Framework:
 
     def __init__(self):
-        self.url = None
+        self._url = None
+
+    @property
+    def url(self):
+        return self._url
 
     def request(self):
-        data = requests.get(self.url).json()
-        return data
+        return requests.get(self.url).json()
 
     def return_data(self):
         pass
