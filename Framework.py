@@ -7,8 +7,7 @@ class Framework:
         self.url = None
 
     def request(self):
-        response = requests.get(self.url)
-        data = response.json()
+        data = requests.get(self.url).json()
         return data
 
     def return_data(self):
