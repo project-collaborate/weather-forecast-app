@@ -22,4 +22,5 @@ class Geo(Framework):
         return self._url
     
     def coordinates(self, data):
+        """Gets the Latitude and Longitude of a given city."""
         return [data[self.result_prob].get('lat'), data[self.result_prob].get('lon')]
