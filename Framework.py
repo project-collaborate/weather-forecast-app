@@ -13,6 +13,7 @@ class Framework:
         return self._url
     
     def __get_api_key(self):
+        """Gets the API key from the config file."""
         with open("config.json") as config_file:
             config = json.load(config_file)
         return config.get("api_key", "")
@@ -22,8 +23,8 @@ class Framework:
         return self.__api_key
 
     def request(self):
+        """Gets(request) the Data from the API."""
         return requests.get(self.url).json()
 
     def return_data(self):
         pass
-
