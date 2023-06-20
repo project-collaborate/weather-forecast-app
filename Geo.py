@@ -2,10 +2,10 @@ from Framework import Framework
 
 
 class Geo(Framework):
-    def __init__(self):
+    def __init__(self, city_name):
         super().__init__()
         self._result_prob = 0
-        self._user_request = input("Choose a location.\n")
+        self._user_request = city_name
         self._url = f"http://api.openweathermap.org/geo/1.0/direct?q={self.user_request}&limit=5&appid={self.api_key}"
         self._coord = self.coordinates(self.request())
 

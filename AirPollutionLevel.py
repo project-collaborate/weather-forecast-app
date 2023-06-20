@@ -11,4 +11,5 @@ class AirPollutionLevel(Framework):
         return self._url
     
     def return_data(self):
-        return self.request().get('list')[0].get("main")
+        # return self.request().get('list')[0].get("main").get('aqi')
+        return self.request().get('list')[0]
