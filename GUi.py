@@ -10,7 +10,7 @@ class NewGUI:
         self.set_colour_theam = ctk.set_default_color_theme('green')
         self.set_appearance_mode = ctk.set_appearance_mode('dark')
         self.window.geometry('600x500+200+200')
-        self.window.title('This is just a try')
+        self.window.title('Weather Forecast')
 
         # ----------------------------- Widgets
 
@@ -19,17 +19,21 @@ class NewGUI:
             text="Weather Forecast App",
             font=("Arial", 25)
         )
-        
+
+        self.input_city_entry = ctk.CTkEntry(
+            self.window,
+            placeholder_text='enter here a city'
+        )
 
         self.check_weather_button = ctk.CTkButton(
             self.window,
             text="Check weather", 
-            command=self.button_click_event
+            command=self.check_weather_event
         )
         
         self.check_weather_frame = ctk.CTkScrollableFrame(
             master=self.window,
-            width=1300,
+            width=100,
             height=250,
             border_width=2
         )
@@ -41,28 +45,79 @@ class NewGUI:
 
         self.history_button = ctk.CTkButton(
             self.window, 
-            text="Dress Recommendation", 
+            text="Check history", 
             command=self.check_history_event
         )
 
   #     ------------------------ Positions
+        self.window.grid_columnconfigure((0, 1), weight=2)
+        self.window.grid_rowconfigure((0, 1, 2, 3), weight=1)
 
-        self.page_title_label.pack(padx=20, pady=20)
-        self.check_weather_button.pack(padx=20, pady=20)
-        self.check_weather_frame.pack(padx=5, pady=5)
-        self.dress_recommendation_button.pack(padx=10, pady=10)
-        self.history_button.pack(padx=10, pady=10)
+        self.page_title_label.grid(
+            row=0,
+            column=0, 
+            padx=20, 
+            pady=20,
+            sticky='ew',
+            columnspan=2
+        )
+
+        self.input_city_entry.grid(
+            row=1,
+            column=0,
+            padx=20, 
+            pady=20,
+            sticky='ew'
+        )
+        self.check_weather_button.grid(
+            row=1,
+            column=1, 
+            padx=20, 
+            pady=20,
+            sticky='ew'
+        )
+        self.check_weather_frame.grid(
+            row=2,
+            column=0, 
+            padx=5, 
+            pady=5,
+            sticky='ew',
+            columnspan=2
+        )
+        self.dress_recommendation_button.grid(
+            row=3,
+            column=0, 
+            padx=10, 
+            pady=10,
+            sticky='ew'
+        )
+        self.history_button.grid(
+            row=3,
+            column=1, 
+            padx=10, 
+            pady=10,
+            sticky='ew'
+        )
 
         self.window.mainloop()
 
-    def button_click_event(self):
-        dialog = ctk.CTkInputDialog(
-            text="Type in a city name",
-            title="Test")
-        self.req1 = Geo(dialog.get_input())
+    # def button_click_event(self):
+    #     dialog = ctk.CTkInputDialog(text="Type in a city name", title="Test")
+
+    def check_weather_event(self):
+
+        for widget in self.check_weather_frame.winfo_children():
+            widget.destroy() 
+
+        self.req1 = Geo(self.input_city_entry.get())
         self.req2 = CurrentWeather(self.req1.coord)
         self.req3 = AirPollutionLevel(self.req1.coord)
         self.req4 = FourDaysForecast(self.req1.coord)
+
+        self.label_req0 = ctk.CTkLabel(
+            self.check_weather_frame,
+            text=f"{self.req1.name}"
+        )
 
         self.label_req1 = ctk.CTkLabel(
             self.check_weather_frame,
@@ -78,19 +133,14 @@ class NewGUI:
             self.check_weather_frame,
             text=f"The level of pollution is: {self.req3.return_data()}"
         )
-        
-        self.divider = ctk.CTkLabel(
-            self.check_weather_frame,
-            text='---------------------------------------------------'
-        )
 
         # print(self.req4.return_data())
-
-        self.label_req1.pack(padx= 10, pady= 10)
-        self.label_req2.pack()
-        self.label_req3.pack()
-        self.divider.pack(padx= 10, pady= 10)
-
+        self.check_weather_frame.grid_columnconfigure(0, weight=1)
+        # self.window.frame.grid_rowconfigure((0, 1, 2, 3, 4), weight=1)
+        self.label_req0.grid(row=0, column=0, padx= 10, pady= 10, sticky='w')
+        self.label_req1.grid(row=1, column=0, padx= 10, pady= 10, sticky='w')
+        self.label_req2.grid(row=2, column=0, padx= 10, pady= 10, sticky='w')
+        self.label_req3.grid(row=3, column=0, padx= 10, pady= 10, sticky='w')
 
     def dress_recommendation_event(self):
         print("dress recommendation button")

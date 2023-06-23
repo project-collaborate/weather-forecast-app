@@ -7,7 +7,9 @@ class Geo(Framework):
         self._result_prob = 0
         self._user_request = city_name
         self._url = f"http://api.openweathermap.org/geo/1.0/direct?q={self.user_request}&limit=5&appid={self.api_key}"
+        self._name = self.get_name(self.request())
         self._coord = self.coordinates(self.request())
+
 
     @property
     def result_prob(self):
@@ -24,6 +26,13 @@ class Geo(Framework):
     @property
     def coord(self):
         return self._coord
+    
+    @property
+    def name(self):
+        return self._name
+    
+    def get_name(self,data):
+        return data[self.result_prob].get('name')
     
     def coordinates(self, data):
         """Gets the Latitude and Longitude of a given city."""
