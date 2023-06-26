@@ -1,4 +1,5 @@
 import customtkinter as ctk
+from PIL import Image 
 from Geo import Geo
 from Current import CurrentWeather
 from AirPollutionLevel import AirPollutionLevel
@@ -31,7 +32,7 @@ class NewGUI:
             command=self.check_weather_event
         )
         
-        self.check_weather_frame = ctk.CTkScrollableFrame(
+        self.check_weather_frame = ctk.CTkFrame(
             master=self.window,
             width=100,
             height=250,
@@ -126,22 +127,54 @@ class NewGUI:
 
         self.label_req2 = ctk.CTkLabel(
             self.check_weather_frame,
-            text=f"The current weather is: {self.req2.return_data().get('main')}, {self.req2.return_data().get('description')}"
+            text=f"{self.req2.return_data().get('weather')[0].get('main')} / {self.req2.return_data().get('weather')[0].get('description')}"
+        )
+
+        self.current_weather_icon = ctk.CTkImage(
+            dark_image=Image.open(f'Icons/{self.req2.return_data().get("weather")[0].get("icon")}@2x.png'),
+            size=(50, 50)
+        )
+        self.weather_icon_label = ctk.CTkLabel(
+            self.check_weather_frame,
+            image=self.current_weather_icon,
+            text=''
         )
 
         self.label_req3 = ctk.CTkLabel(
             self.check_weather_frame,
-            text=f"The level of pollution is: {self.req3.return_data()}"
+            text=f"The level of pollution is: {self.req3.return_data()[0]} / {self.req3.return_data()[1]}"
+        )
+
+        self.temperature_label = ctk.CTkLabel(
+            self.check_weather_frame,
+            text=f'temp: {self.kelvin_celcius(self.req2.return_data().get("main").get("temp"))}°'
+        )
+        self.temp_max_label = ctk.CTkLabel(
+            self.check_weather_frame,
+            text=f"max temp: {self.kelvin_celcius(self.req2.return_data().get('main').get('temp_max'))}°"
+        )
+
+        self.temp_min_label = ctk.CTkLabel(
+            self.check_weather_frame,
+            text=f"min temp: {self.kelvin_celcius(self.req2.return_data().get('main').get('temp_min'))}°"
         )
 
         # print(self.req4.return_data())
-        self.check_weather_frame.grid_columnconfigure(0, weight=1)
-        # self.window.frame.grid_rowconfigure((0, 1, 2, 3, 4), weight=1)
-        self.label_req0.grid(row=0, column=0, padx= 10, pady= 10, sticky='w')
-        self.label_req1.grid(row=1, column=0, padx= 10, pady= 10, sticky='w')
-        self.label_req2.grid(row=2, column=0, padx= 10, pady= 10, sticky='w')
-        self.label_req3.grid(row=3, column=0, padx= 10, pady= 10, sticky='w')
+        self.check_weather_frame.grid_columnconfigure((0, 1, 2, 3, 4,5,6,7,8,9,10), weight=1)
+        # self.check_weather_frame.grid_rowconfigure((0, 1, 2, 3, 4), weight=1)
+        self.label_req0.grid(row=0, column=0, padx= 10, pady= 10, sticky='ew', columnspan=2)
+        # self.label_req1.grid(row=1, column=0, padx= 10, pady= 10, sticky='w')
+        self.label_req2.grid(row=1, column=0, padx= 10, pady= 10, sticky='ew', columnspan=2)
+        self.weather_icon_label.grid(row=2, column=0, padx=10, pady=10, sticky='ew', columnspan=2)
+        self.label_req3.grid(row=5, column=0, padx= 10, pady= 10, sticky='ew', columnspan=2)
+        self.temperature_label.grid(row=3, column=0, padx=10, pady=10, sticky='ew', columnspan=2)
+        self.temp_min_label.grid(row=4, column=0, padx=10, pady=10, sticky='ew')
+        self.temp_max_label.grid(row=4, column=1, padx=10, pady=10, sticky='ew')
 
+
+    def kelvin_celcius(self, temperature):
+        return "{:.2f}".format(temperature - 273.15)
+    
     def dress_recommendation_event(self):
         print("dress recommendation button")
 

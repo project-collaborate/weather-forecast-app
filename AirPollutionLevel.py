@@ -11,5 +11,11 @@ class AirPollutionLevel(Framework):
         return self._url
     
     def return_data(self):
-        # return self.request().get('list')[0].get("main").get('aqi')
-        return self.request().get('list')[0]
+        if self.request().get('list')[0].get("main").get('aqi') == 1:
+            return [self.request().get('list')[0].get("main").get('aqi'), "Clear"]
+        elif self.request().get('list')[0].get("main").get('aqi') == 2:
+            return [self.request().get('list')[0].get("main").get('aqi'), "Good"]
+        elif self.request().get('list')[0].get("main").get('aqi') == 3:
+            return [self.request().get('list')[0].get("main").get('aqi'), "Moderate"]
+        else:
+            return [self.request().get('list')[0].get("main").get('aqi'), "Dangerous"]

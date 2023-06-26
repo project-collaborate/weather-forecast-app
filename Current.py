@@ -11,4 +11,5 @@ class CurrentWeather(Framework):
         return self._url
     
     def return_data(self):
-        return self.request().get('weather')[0]
+        # return self.request().get('weather')[0]
+        return self.request()
